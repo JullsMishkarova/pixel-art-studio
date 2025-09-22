@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pixel Art Studio — Уеб дизайн, графичен дизайн и дигитален маркетинг</title>
+  <meta name="description" content="Pixel Art Studio — изработка на модерни сайтове, графичен дизайн, поддръжка и дигитален маркетинг за малък бизнес. София • Онлайн."/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b0c10;            /* фон */
+      --bg2:#0d1020;
+      --text:#e9eef4;
+      --muted:#93a0b9;
+      --card:#11131a;
+      --line:#1b2133;
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+      /* Палитра А (пиксел-поп) */
+      --cyan:#00D1FF;
+      --yellow:#FFD400;
+      --pink:#FF2E63;
+      --primary-grad-from:#05e1ff;
+      --primary-grad-to:#00b4ff;
+      --radius:18px;
+      --radius-soft:14px;
+      --radius-btn:14px;
+      --speed:300ms;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:linear-gradient(180deg,var(--bg),var(--bg2));color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;scroll-behavior:smooth}
+    img{max-width:100%;display:block}
+    a{color:var(--cyan);text-decoration:none}
+    .container{max-width:1100px;margin:0 auto;padding:0 20px}
+
+    /* Header (sticky, плосък фон) */
+    header{position:sticky;top:0;z-index:50;background:rgba(12,14,24,.9);border-bottom:1px solid var(--line)}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
+    .logo{display:flex;align-items:center;gap:12px}
+    .logo-mark{width:36px;height:36px;border-radius:8px;position:relative;overflow:hidden;background:#0b0f1e;border:1px solid #1a2238}
+    .logo-mark::before{content:"";position:absolute;left:6px;top:6px;width:12px;height:12px;background:var(--yellow)}
+    .logo-mark::after{content:"";position:absolute;right:6px;bottom:6px;width:12px;height:12px;background:var(--cyan)}
+    .brand{font-weight:800;letter-spacing:.2px}
+    .sub{font-size:12px;color:var(--muted)}
+    nav a{color:var(--text);opacity:.9;margin-left:18px}
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:var(--radius-btn);border:1px solid #1e2740;background:#11162a;color:var(--text);font-weight:600;transition:transform var(--speed), box-shadow var(--speed), opacity var(--speed)}
+    .btn:hover{transform:translateY(-1px)}
+    .btn.primary{border:none;background:linear-gradient(180deg,var(--primary-grad-from),var(--primary-grad-to));color:#001322;box-shadow:0 6px 20px rgba(0,209,255,.25)}
+    .btn.primary:hover{box-shadow:0 10px 26px rgba(0,209,255,.35)}
+    .btn.outline{background:transparent;border:1px solid #2a355a}
+
+    /* Hero */
+    .hero{padding:70px 0 34px}
+    .hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:center}
+    .badge{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border:1px dashed #2a355a;border-radius:999px;color:#c7d2e3;background:#0f1426;font-size:13px}
+    h1.title{font-size:48px;line-height:1.05;margin:14px 0 10px;font-weight:800}
+    .subtitle{color:var(--muted);font-size:18px;margin:12px 0 18px}
+    .chips{display:flex;flex-wrap:wrap;gap:8px}
+    .chip{padding:8px 12px;border-radius:999px;border:1px solid #2a355a;background:#0f1426;color:#c7d2e3;font-size:13px}
+    .hero-card{background:linear-gradient(180deg,#101426,#0d1224);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+
+    /* Пикселна мозайка (SVG декор вдясно) */
+    .pixel-mosaic{aspect-ratio:1.2/1;border-radius:var(--radius);border:1px solid var(--line);background:#0d1224;position:relative;overflow:hidden}
+    .pgrid{position:absolute;inset:0;display:grid;grid-template-columns:repeat(10,1fr);grid-auto-rows:1fr;gap:6px;padding:16px}
+    .p{border-radius:4px;opacity:.85;filter:drop-shadow(0 8px 16px rgba(0,0,0,.35))}
+    /* цветове за пикселите */
+    .c1{background:var(--cyan)} .c2{background:var(--yellow)} .c3{background:var(--pink)}
+    .dim{opacity:.25}
+
+    /* Sections */
+    .section{padding:36px 0}
+    .section h2{font-size:32px;margin:0 0 14px}
+    .grid{display:grid;gap:18px}
+    .features{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .card{background:var(--card);border:1px solid #1c2236;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+    .card h3{margin:0 0 6px}
+    .muted{color:var(--muted)}
+
+    .portfolio{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .tile{aspect-ratio:16/11;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:radial-gradient(80% 80% at 20% 20%,#14203a,#0e1326)}
+
+    .pricing{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .price{font-size:36px;font-weight:800}
+    .popular{outline:2px solid var(--cyan)}
+
+    /* Форма */
+    .contact{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    label{font-size:14px;color:#c7d2e3}
+    input,textarea,select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #233052;background:#0e1428;color:var(--text)}
+    .tiny{font-size:12px;color:#8090ad}
+
+    /* Футър */
+    .footer{padding:24px 0;color:#a9b3c9;border-top:1px solid var(--line)}
+    .socials{display:flex;gap:12px}
+    .icon{width:20px;height:20px;display:inline-block}
+
+    /* Sticky mobile CTA */
+    .mobile-cta{position:fixed;left:0;right:0;bottom:10px;z-index:60;display:none;justify-content:center}
+    .mobile-cta .btn{padding:14px 20px;border-radius:18px}
+    @media (max-width: 860px){
+      .hero-grid{grid-template-columns:1fr}
+      .features,.pricing,.portfolio,.contact{grid-template-columns:1fr}
+      h1.title{font-size:38px}
+      nav a{display:none}
+      .mobile-cta{display:flex}
+    }
+
+    /* Анимации (леки fade-in + hover) */
+    [data-anim]{opacity:0;transform:translateY(10px);transition:opacity var(--speed) ease, transform var(--speed) ease}
+    [data-anim].in{opacity:1;transform:none}
+    .btn:hover{opacity:.95}
+
+    /* Мини toast */
+    .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#0f172a;border:1px solid #223056;color:#dbe7ff;padding:12px 16px;border-radius:12px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity var(--speed)}
+    .toast.show{opacity:1}
+
+    /* Pixel icons (16px, blocky) */
+    .px-icon{width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px}
+    .px-web{background: conic-gradient(from 0deg at 50% 50%, var(--cyan) 0 25%, var(--yellow) 0 50%, var(--pink) 0 75%, #fff0 0)}
+    .px-shop{background:
+      linear-gradient(var(--cyan) 0 4px,transparent 0),
+      linear-gradient(90deg,var(--cyan) 0 4px,transparent 0),
+      linear-gradient(var(--pink) 0 4px,transparent 0) 0 8px/100% 4px no-repeat;
+      background-size:100% 4px,4px 100%,100% 4px}
+    .px-design{background:
+      linear-gradient(var(--yellow) 0 50%, var(--pink) 0) left/50% 100% no-repeat,
+      linear-gradient(var(--cyan),var(--cyan)) right/50% 50% no-repeat}
+  </style>
+</head>
+<body>
+  <!-- Sticky header -->
+  <header>
+    <div class="container nav">
+      <div class="logo">
+        <div class="logo-mark" aria-hidden="true"></div>
+        <div>
+          <div class="brand">Pixel Art Studio</div>
+          <div class="sub">уеб • дизайн • маркетинг</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#services">Услуги</a>
+        <a href="#work">Портфолио</a>
+        <a href="#pricing">Цени</a>
+        <a href="#about">За нас</a>
+        <a href="#contact" class="btn primary">Запитване</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div data-anim>
+        <span class="badge">⭐ Бързи срокове • Гъвкави пакети • Поддръжка</span>
+        <h1 class="title">Модерни <span style="position:relative;display:inline-block">
+          уебсайтове
+          <span aria-hidden="true" style="position:absolute;left:6px;top:10px;width:12px;height:12px;background:var(--yellow);box-shadow:18px 0 0 var(--cyan),36px 0 0 var(--pink)"></span>
+        </span> и дизайн за малък бизнес</h1>
+        <p class="subtitle">Изработка на сайтове (визитка, фирмен, онлайн магазин), графичен дизайн и дигитален маркетинг. Помагаме ти да изглеждаш професионално и да привличаш клиенти.</p>
+        <div class="chips">
+          <span class="chip"><span class="px-icon px-web"></span>WordPress / Custom</span>
+          <span class="chip"><span class="px-icon px-design"></span>Лога и бранд</span>
+          <span class="chip"><span class="px-icon px-web"></span>SEO основи</span>
+          <span class="chip"><span class="px-icon px-shop"></span>Facebook / Instagram</span>
+        </div>
+        <p style="margin-top:18px">
+          <a class="btn primary" href="#contact">Получете оферта</a>
+          <a class="btn outline" href="#work">Виж портфолио</a>
+        </p>
+      </div>
+
+      <!-- Пикселна мозайка -->
+      <div class="pixel-mosaic" data-anim>
+        <div class="pgrid" aria-hidden="true">
+          <!-- 10x? решетка с цветни блокове -->
+          <!-- ред 1 -->
+          <div class="p c1"></div><div class="p dim"></div><div class="p c2"></div><div class="p dim"></div><div class="p c3"></div><div class="p dim"></div><div class="p c1"></div><div class="p dim"></div><div class="p c2"></div><div class="p dim"></div>
+          <!-- ред 2 -->
+          <div class="p dim"></div><div class="p c3"></div><div class="p dim"></div><div class="p c1"></div><div class="p dim"></div><div class="p c2"></div><div class="p dim"></div><div class="p c3"></div><div class="p dim"></div><div class="p c1"></div>
+          <!-- ред 3 -->
+          <div class="p c2"></div><div class="p dim"></div><div class="p c1"></div><div class="p dim"></div><div class="p c3"></div><div class="p dim"></div><div class="p c2"></div><div class="p dim"></div><div class="p c1"></div><div class="p dim"></div>
+          <!-- ред 4 -->
+          <div class="p dim"></div><div class="p c1"></div><div class="p dim"></div><div class="p c2"></div><div class="p dim"></div><div class="p c3"></div><div class="p dim"></div><div class="p c1"></div><div class="p dim"></div><div class="p c2"></div>
+          <!-- ред 5 -->
+          <div class="p c3"></div><div class="p dim"></div><div class="p c2"></div><div class="p dim"></div><div class="p c1"></div><div class="p dim"></div><div class="p c3"></div><div class="p dim"></div><div class="p c2"></div><div class="p dim"></div>
+          <!-- ред 6 -->
+          <div class="p dim"></div><div class="p c2"></div><div class="p dim"></div><div class="p c3"></div><div class="p dim"></div><div class="p c1"></div><div class="p dim"></div><div class="p c2"></div><div class="p dim"></div><div class="p c3"></div>
+          <!-- ред 7 -->
+          <div class="p c1"></div><div class="p dim"></div><div class="p c3"></div><div class="p dim"></div><div class="p c2"></div><div class="p dim"></div><div class="p c1"></div><div class="p dim"></div><div class="p c3"></div><div class="p dim"></div>
+          <!-- ред 8 -->
+          <div class="p dim"></div><div class="p c3"></div><div class="p dim"></div><div class="p c1"></div><div class="p dim"></div><div class="p c2"></div><div class="p dim"></div><div class="p c3"></div><div class="p dim"></div><div class="p c1"></div>
+          <!-- ред 9 -->
+          <div class="p c2"></div><div class="p dim"></div><div class="p c1"></div><div class="p dim"></div><div class="p c3"></div><div class="p dim"></div><div class="p c2"></div><div class="p dim"></div><div class="p c1"></div><div class="p dim"></div>
+          <!-- ред 10 -->
+          <div class="p dim"></div><div class="p c1"></div><div class="p dim"></div><div class="p c2"></div><div class="p dim"></div><div class="p c3"></div><div class="p dim"></div><div class="p c1"></div><div class="p dim"></div><div class="p c2"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Услуги -->
+  <section id="services" class="section">
+    <div class="container">
+      <h2 data-anim>Услуги</h2>
+      <div class="grid features">
+        <div class="card" data-anim>
+          <h3><span class="px-icon px-web"></span> Изработка на сайтове</h3>
+          <p class="muted">Сайт-визитка, фирмен сайт с блог или онлайн магазин. Дизайн по бранд, мобилна оптимизация и интеграции.</p>
+        </div>
+        <div class="card" data-anim>
+          <h3><span class="px-icon px-design"></span> Графична идентичност</h3>
+          <p class="muted">Лого, цветове, типография, шаблони за постове и презентации. Консистентен визуален стил.</p>
+        </div>
+        <div class="card" data-anim>
+          <h3><span class="px-icon px-shop"></span> Дигитален маркетинг</h3>
+          <p class="muted">План за съдържание, публикации, рекламни кампании (Meta/Google), имейл бюлетин.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Портфолио -->
+  <section id="work" class="section">
+    <div class="container">
+      <h2 data-anim>Портфолио (извадка)</h2>
+      <div class="grid portfolio">
+        <div class="tile card" data-anim>
+          <div style="padding:14px">
+            <strong>Сайт за почистваща фирма</strong>
+            <small class="muted"><br>WordPress • Формуляр за запитване</small>
+          </div>
+        </div>
+        <div class="tile card" data-anim>
+          <div style="padding:14px">
+            <strong>One-page сайт за фотограф</strong>
+            <small class="muted"><br>Custom • Галерия • Лек дизайн</small>
+          </div>
+        </div>
+        <div class="tile card" data-anim>
+          <div style="padding:14px">
+            <strong>Онлайн меню за кафе</strong>
+            <small class="muted"><br>WooCommerce • QR поръчки</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Цени -->
+  <section id="pricing" class="section">
+    <div class="container">
+      <h2 data-anim>Пакети и ориентировъчни цени</h2>
+      <div class="grid pricing">
+        <div class="card" data-anim>
+          <h3>Basic</h3>
+          <p class="muted">Сайт-визитка (до 5 стр.) + базово SEO</p>
+          <div class="price">290–390 лв.</div>
+          <p><a href="#contact" class="btn outline">Запитване</a></p>
+        </div>
+        <div class="card popular" data-anim>
+          <h3>Standard</h3>
+          <p class="muted">Фирмен сайт (до 10 стр.) + 1 месец поддръжка</p>
+          <div class="price">690–890 лв.</div>
+          <p><a href="#contact" class="btn primary">Поръчай</a></p>
+        </div>
+        <div class="card" data-anim>
+          <h3>Premium</h3>
+          <p class="muted">Онлайн магазин + SEO + кампания</p>
+          <div class="price">от 1400 лв.</div>
+          <p><a href="#contact" class="btn outline">Запитване</a></p>
+        </div>
+      </div>
+      <p class="tiny" style="margin-top:10px">* Финална цена след кратък бриф. Издаваме оферта и срокове.</p>
+    </div>
+  </section>
+
+  <!-- За нас -->
+  <section id="about" class="section">
+    <div class="container">
+      <h2 data-anim>За Pixel Art Studio</h2>
+      <p class="muted" data-anim>Ние сме малко студио, което помага на локални бизнеси да излязат онлайн бързо и красиво. Работим изцяло дистанционно и предлагаме ясна комуникация, прозрачни срокове и практични решения.</p>
+    </div>
+  </section>
+
+  <!-- Контакт -->
+  <section id="contact" class="section">
+    <div class="container">
+      <h2 data-anim>Запитване</h2>
+      <form class="contact card" id="contactForm" data-anim>
+        <div>
+          <label>Име</label>
+          <input required name="name" placeholder="Вашето име" />
+        </div>
+        <div>
+          <label>Имейл</label>
+          <input required type="email" name="email" placeholder="name@example.com" />
+        </div>
+        <div>
+          <label>Телефон (по желание)</label>
+          <input name="phone" placeholder="+359 ..." />
+        </div>
+        <div>
+          <label>Услуга</label>
+          <select name="service">
+            <option>Сайт-визитка</option>
+            <option>Фирмен сайт</option>
+            <option>Онлайн магазин</option>
+            <option>Графичен дизайн</option>
+            <option>Дигитален маркетинг</option>
+          </select>
+        </div>
+        <div style="grid-column:1/-1">
+          <label>Кратко описание</label>
+          <textarea name="message" rows="5" placeholder="Разкажете ни накратко какво ви трябва…"></textarea>
+        </div>
+        <div style="grid-column:1/-1;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+          <span class="tiny">Изпращайки формата, приемате обработка на данните за целите на оферта (GDPR).</span>
+          <button class="btn primary" type="submit">Изпрати запитване</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Футър -->
+  <footer class="footer">
+    <div class="container" style="display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap">
+      <div>© <span id="year"></span> Pixel Art Studio</div>
+      <div class="tiny">
+        Имейл: <a href="mailto:hello@pixelartstudio.bg">hello@pixelartstudio.bg</a> ·
+        Тел: <a href="tel:+359000000000">+359 00 000 000</a>
+      </div>
+      <div class="socials">
+        <a href="#" aria-label="Facebook" title="Facebook" class="icon">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M13.5 9H15V6h-1.5C11.6 6 11 7.2 11 8.8V10H9v3h2v7h3v-7h2l.5-3H14v-1c0-.6.2-1 1-1z"/></svg>
+        </a>
+        <a href="#" aria-label="Instagram" title="Instagram" class="icon">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-6 3a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Sticky mobile CTA -->
+  <div class="mobile-cta">
+    <a href="#contact" class="btn primary">Заяви оферта</a>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast" role="status" aria-live="polite">Благодарим! Ще се свържем с вас скоро.</div>
+
+  <script>
+    // година
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Лека анимация при скрол
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); }});
+    }, {threshold: 0.1});
+    document.querySelectorAll('[data-anim]').forEach(el=>observer.observe(el));
+
+    // Mailto "изпращане" + toast
+    const form = document.getElementById('contactForm');
+    const toast = document.getElementById('toast');
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      const d = new FormData(e.target);
+      const subject = encodeURIComponent('Ново запитване от сайта');
+      const body = encodeURIComponent(
+        `Име: ${d.get('name')}\nИмейл: ${d.get('email')}\nТелефон: ${d.get('phone')||''}\nУслуга: ${d.get('service')}\n\nОписание:\n${d.get('message')||''}`
+      );
+      window.location.href = `mailto:hello@pixelartstudio.bg?subject=${subject}&body=${body}`;
+      toast.classList.add('show');
+      setTimeout(()=>toast.classList.remove('show'), 2800);
+    });
+
+    // Скрий мобилния CTA, когато формата е фокусирана (по-удобно за клавиатура)
+    const mobileCta = document.querySelector('.mobile-cta');
+    form.addEventListener('focusin', ()=> mobileCta.style.display='none');
+    form.addEventListener('focusout', ()=> {
+      if (window.innerWidth <= 860) mobileCta.style.display='flex';
+    });
+  </script>
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Pixel Art Studio",
+    "url": "https://example.com",
+    "logo": "https://example.com/logo.png",
+    "sameAs": ["https://www.facebook.com/", "https://www.instagram.com/"],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "sales",
+      "email": "hello@pixelartstudio.bg",
+      "telephone": "+359000000000"
+    }
+  }
+  </script>
+</body>
+</html>
