@@ -10,7 +10,6 @@
     :root{
       --bg:#0b0c10; --bg2:#0d1020; --text:#e9eef4; --muted:#93a0b9;
       --card:#11131a; --line:#1b2133; --shadow:0 10px 30px rgba(0,0,0,.35);
-      /* Палитра А (пиксел-поп) */
       --cyan:#00D1FF; --yellow:#FFD400; --pink:#FF2E63;
       --primary-grad-from:#05e1ff; --primary-grad-to:#00b4ff;
       --radius:18px; --radius-soft:14px; --radius-btn:14px; --speed:300ms;
@@ -112,6 +111,18 @@
     .px-design{background:
       linear-gradient(var(--yellow) 0 50%, var(--pink) 0) left/50% 100% no-repeat,
       linear-gradient(var(--cyan),var(--cyan)) right/50% 50% no-repeat}
+
+    /* >>> ДОБАВЕНО: текстът над декоративните пиксели в hero */
+    .hero-text{position:relative; z-index:1}
+    .decor-under{
+      position:absolute; left:6px; top:1.6em; /* под думата */
+      width:12px; height:12px; background:var(--yellow);
+      box-shadow:18px 0 0 var(--cyan),36px 0 0 var(--pink);
+      z-index:0; opacity:.95;
+    }
+    @media (max-width:860px){
+      .decor-under{ top:1.8em; transform:scale(.95); }
+    }
   </style>
 </head>
 <body>
@@ -138,11 +149,13 @@
   <!-- Hero -->
   <section class="hero">
     <div class="container hero-grid">
-      <div data-anim>
+      <!-- ДОБАВЕНО: клас hero-text -->
+      <div class="hero-text" data-anim>
         <span class="badge">⭐ Бързи срокове • Гъвкави пакети • Поддръжка</span>
         <h1 class="title">Модерни <span style="position:relative;display:inline-block">
           уебсайтове
-          <span aria-hidden="true" style="position:absolute;left:6px;top:10px;width:12px;height:12px;background:var(--yellow);box-shadow:18px 0 0 var(--cyan),36px 0 0 var(--pink)"></span>
+          <!-- ЗАМЕНЕНО: декоративните квадратчета вече са под текста -->
+          <span aria-hidden="true" class="decor-under"></span>
         </span> и дизайн за малък бизнес</h1>
         <p class="subtitle">Изработка на сайтове (визитка, фирмен, онлайн магазин), графичен дизайн и дигитален маркетинг. Помагаме ти да изглеждаш професионално и да привличаш клиенти.</p>
         <div class="chips">
