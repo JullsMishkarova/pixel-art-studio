@@ -46,7 +46,7 @@
     .chip{padding:8px 12px;border-radius:999px;border:1px solid #2a355a;background:#0f1426;color:#c7d2e3;font-size:13px}
     .hero-card{background:linear-gradient(180deg,#101426,#0d1224);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
 
-    /* Пикселна мозайка */
+    /* Пикселна мозайка (само вдясно, не върху текста) */
     .pixel-mosaic{aspect-ratio:1.2/1;border-radius:var(--radius);border:1px solid var(--line);background:#0d1224;position:relative;overflow:hidden}
     .pgrid{position:absolute;inset:0;display:grid;grid-template-columns:repeat(10,1fr);grid-auto-rows:1fr;gap:6px;padding:16px}
     .p{border-radius:4px;opacity:.85;filter:drop-shadow(0 8px 16px rgba(0,0,0,.35))}
@@ -99,30 +99,6 @@
     /* Toast */
     .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#0f172a;border:1px solid #223056;color:#dbe7ff;padding:12px 16px;border-radius:12px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity var(--speed)}
     .toast.show{opacity:1}
-
-    /* Pixel icons */
-    .px-icon{width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px}
-    .px-web{background: conic-gradient(from 0deg at 50% 50%, var(--cyan) 0 25%, var(--yellow) 0 50%, var(--pink) 0 75%, #fff0 0)}
-    .px-shop{background:
-      linear-gradient(var(--cyan) 0 4px,transparent 0),
-      linear-gradient(90deg,var(--cyan) 0 4px,transparent 0),
-      linear-gradient(var(--pink) 0 4px,transparent 0) 0 8px/100% 4px no-repeat;
-      background-size:100% 4px,4px 100%,100% 4px}
-    .px-design{background:
-      linear-gradient(var(--yellow) 0 50%, var(--pink) 0) left/50% 100% no-repeat,
-      linear-gradient(var(--cyan),var(--cyan)) right/50% 50% no-repeat}
-
-    /* >>> ДОБАВЕНО: текстът над декоративните пиксели в hero */
-    .hero-text{position:relative; z-index:1}
-    .decor-under{
-      position:absolute; left:6px; top:1.6em; /* под думата */
-      width:12px; height:12px; background:var(--yellow);
-      box-shadow:18px 0 0 var(--cyan),36px 0 0 var(--pink);
-      z-index:0; opacity:.95;
-    }
-    @media (max-width:860px){
-      .decor-under{ top:1.8em; transform:scale(.95); }
-    }
   </style>
 </head>
 <body>
@@ -149,14 +125,9 @@
   <!-- Hero -->
   <section class="hero">
     <div class="container hero-grid">
-      <!-- ДОБАВЕНО: клас hero-text -->
-      <div class="hero-text" data-anim>
+      <div data-anim>
         <span class="badge">⭐ Бързи срокове • Гъвкави пакети • Поддръжка</span>
-        <h1 class="title">Модерни <span style="position:relative;display:inline-block">
-          уебсайтове
-          <!-- ЗАМЕНЕНО: декоративните квадратчета вече са под текста -->
-          <span aria-hidden="true" class="decor-under"></span>
-        </span> и дизайн за малък бизнес</h1>
+        <h1 class="title">Модерни уебсайтове и дизайн за малък бизнес</h1>
         <p class="subtitle">Изработка на сайтове (визитка, фирмен, онлайн магазин), графичен дизайн и дигитален маркетинг. Помагаме ти да изглеждаш професионално и да привличаш клиенти.</p>
         <div class="chips">
           <span class="chip"><span class="px-icon px-web"></span>WordPress / Custom</span>
@@ -170,10 +141,9 @@
         </p>
       </div>
 
-      <!-- Пикселна мозайка -->
+      <!-- Пикселна мозайка вдясно (не върху текста) -->
       <div class="pixel-mosaic" data-anim>
         <div class="pgrid" aria-hidden="true">
-          <!-- 10x10 решетка с цветни блокове -->
           <div class="p c1"></div><div class="p dim"></div><div class="p c2"></div><div class="p dim"></div><div class="p c3"></div><div class="p dim"></div><div class="p c1"></div><div class="p dim"></div><div class="p c2"></div><div class="p dim"></div>
           <div class="p dim"></div><div class="p c3"></div><div class="p dim"></div><div class="p c1"></div><div class="p dim"></div><div class="p c2"></div><div class="p dim"></div><div class="p c3"></div><div class="p dim"></div><div class="p c1"></div>
           <div class="p c2"></div><div class="p dim"></div><div class="p c1"></div><div class="p dim"></div><div class="p c3"></div><div class="p dim"></div><div class="p c2"></div><div class="p dim"></div><div class="p c1"></div><div class="p dim"></div>
@@ -340,16 +310,13 @@
   <div id="toast" class="toast" role="status" aria-live="polite">Благодарим! Ще се свържем с вас скоро.</div>
 
   <script>
-    // година
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Лека анимация при скрол
     const observer = new IntersectionObserver((entries)=>{
       entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); }});
     }, {threshold: 0.1});
     document.querySelectorAll('[data-anim]').forEach(el=>observer.observe(el));
 
-    // Mailto "изпращане" + toast
     const form = document.getElementById('contactForm');
     const toast = document.getElementById('toast');
     form.addEventListener('submit', function(e){
@@ -357,14 +324,19 @@
       const d = new FormData(e.target);
       const subject = encodeURIComponent('Ново запитване от сайта');
       const body = encodeURIComponent(
-        `Име: ${d.get('name')}\nИмейл: ${d.get('email')}\nТелефон: ${d.get('phone')||''}\nУслуга: ${d.get('service')}\n\nОписание:\n${d.get('message')||''}`
+        `Име: ${d.get('name')}
+Имейл: ${d.get('email')}
+Телефон: ${d.get('phone')||''}
+Услуга: ${d.get('service')}
+
+Описание:
+${d.get('message')||''}`
       );
       window.location.href = `mailto:pixelartstudioeu@gmail.com?subject=${subject}&body=${body}`;
       toast.classList.add('show');
       setTimeout(()=>toast.classList.remove('show'), 2800);
     });
 
-    // Скрий мобилния CTA, когато формата е фокусирана
     const mobileCta = document.querySelector('.mobile-cta');
     form.addEventListener('focusin', ()=> mobileCta.style.display='none');
     form.addEventListener('focusout', ()=> {
@@ -372,7 +344,6 @@
     });
   </script>
 
-  <!-- Schema.org -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -386,3 +357,4 @@
   </script>
 </body>
 </html>
+
